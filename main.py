@@ -2,7 +2,7 @@ import json
 import os
 import copy
 import numpy as np
-
+import pandas as pd
 
 class Data:
     omscentral_datatype = None
@@ -15,6 +15,19 @@ class Data:
         with open(path) as f:
             data = json.load(f)
         return data
+
+    def convert_to_df(self, data_dicts):
+        df_dict = {}
+        for key in data_dicts[0].keys():
+            df_dict[key] = []
+        for data_dict in data_dicts:
+            for key, val in data_dict.items():
+                df_dict[key].append(val)
+        self.df = pd.DataFrame.from_dict(df_dict)
+
+    def convert_df_to_csv(self, filename):
+        self.df.to_csv(f'{filename}.csv')
+
 
 
 class Reviews(Data):
@@ -99,6 +112,7 @@ class Specializations(Data):
 
 if __name__ == '__main__':
     reviews = Reviews()
+    breakpoint()
     courses = Courses()
     # programs = Programs()
     semesters = Semesters()
